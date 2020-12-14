@@ -1,4 +1,5 @@
 <button (click)="fileInput.click()">Select Image</button>
 <input type="file" (change)="onImageChange($event)" #fileInput hidden />
 <input value="{{ filename ? filename : 'Text' }}" readonly />
-<img *ngIf="imgUrl" [src]="imgUrl" alt="Uploaded image" />
+<!--<button (click)="onSliceImage()">Slice Image</button>-->
+<canvas #myCanvas></canvas>
