@@ -26,6 +26,10 @@ export class ImageSlicerComponent implements OnInit {
   ngOnInit(): void {}
   ngAfterViewInit(): void {
     this.ctx = this.myCanvas.nativeElement.getContext('2d');
+    this.ctx.canvas.height = 500; //this.image.height;
+    this.ctx.canvas.width = 500; //this.image.width;
+    this.ctx.fillStyle = '#333333';
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
   onImageChange(event) {
     // get name and data from upload event
@@ -36,19 +40,61 @@ export class ImageSlicerComponent implements OnInit {
     reader.onload = async (_event) => {
       this.imgData = reader.result;
       await this.convertToString();
-      this.ctx.canvas.height = this.image.height;
-      this.ctx.canvas.width = this.image.width;
-      this.ctx.drawImage(this.image, 0, 0);
+      this.drawImageProp();
+      /*
+      this.ctx.strokeStyle = '#FF0000';
+      this.ctx.lineWidth = 3;
+      this.ctx.beginPath();
+      this.ctx.moveTo(100, 100);
+      this.ctx.lineTo(100, 400);
+      this.ctx.stroke();*/
     };
   }
 
   convertToString() {
     this.image.src = this.imgData.toString();
   }
-  displayCanvas() {
-    this.ctx.drawImage(this.image, 0, 0);
-    // set cursor pointer
+  /**
+   * By Ken Fyrstenberg Nilsen
+   *
+   * drawImageProp(context, image [, x, y, width, height [,offsetX, offsetY]])
+   *
+   * If image and context are only arguments rectangle will equal canvas
+   */
+  drawImageProp() {
+    const imgHeight = this.image.height;
+    const imgWidth = this.image.width;
+    const canvasWidth = 500;
+    const canvasHeight = 500;
+    if (imgHeight <= canvasHeight && imgWidth <= canvasWidth) {
+      this.ctx.drawImage(
+        this.image,
+        (this.ctx.canvas.width - imgWidth) / 2,
+        (this.ctx.canvas.height - imgHeight) / 2
+      );
+    } else {
+      const heightDiff = imgHeight / canvasHeight;
+      const widthDiff = imgWidth / canvasWidth;
+      if (heightDiff > widthDiff) {
+        this.ctx.drawImage(
+          this.image,
+          (this.ctx.canvas.width - imgWidth / heightDiff) / 2,
+          0,
+          imgWidth / heightDiff,
+          canvasHeight
+        );
+      } else {
+        this.ctx.drawImage(
+          this.image,
+          0,
+          (this.ctx.canvas.height - imgHeight / widthDiff) / 2,
+          canvasWidth,
+          imgHeight / widthDiff
+        );
+      }
+    }
   }
+
   /*onSliceImage() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
     var imagePieces = [];

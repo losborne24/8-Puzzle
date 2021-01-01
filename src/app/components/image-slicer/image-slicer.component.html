@@ -1,5 +1,12 @@
-<button (click)="fileInput.click()">Select Image</button>
-<input type="file" (change)="onImageChange($event)" #fileInput hidden />
-<input value="{{ filename ? filename : 'Text' }}" readonly />
-<!--<button (click)="onSliceImage()">Slice Image</button>-->
-<canvas #myCanvas></canvas>
+<div class="container">
+  <div class="col">
+    <button (click)="fileInput.click()">Select Image</button>
+    <input type="file" (change)="onImageChange($event)" #fileInput hidden />
+    <input value="{{ filename ? filename : 'Text' }}" readonly />
+  </div>
+  <div class="col">
+    <!--<button (click)="onSliceImage()">Slice Image</button>-->
+
+    <canvas #myCanvas></canvas>
+  </div>
+</div>
