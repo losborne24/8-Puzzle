@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+.side-container {
+  grid-column: span 4 / auto;
+  background-color: #333;
+  display: flex;
+  flex-direction: column;
+}
+.image-container {
+  grid-column: span 8 / auto;
+}
+.single-row {
+  display: flex;
+  align-items: center;
+}
