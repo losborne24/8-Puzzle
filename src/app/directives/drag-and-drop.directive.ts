@@ -1,7 +1,6 @@
 import {
   Directive,
   Output,
-  Input,
   EventEmitter,
   HostBinding,
   HostListener,
@@ -11,29 +10,30 @@ import {
   selector: '[appDragAndDrop]',
 })
 export class DragAndDropDirective {
-  @HostBinding('class.fileover') fileOver: boolean;
+  // @HostBinding('class.fileHover') fileHover: boolean;
+  @Output() fileHover = new EventEmitter<any>();
   @Output() fileDropped = new EventEmitter<any>();
 
   // Dragover listener
   @HostListener('dragover', ['$event']) onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver = true;
+    this.fileHover.emit(true);
   }
 
   // Dragleave listener
-  @HostListener('dragleave', ['$event']) public onDragLeave(evt) {
-    evt.preventDefault();
-    evt.stopPropagation();
-    this.fileOver = false;
+  @HostListener('dragleave', ['$event']) onDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.fileHover.emit(false);
   }
 
   // Drop listener
-  @HostListener('drop', ['$event']) public ondrop(evt) {
-    evt.preventDefault();
-    evt.stopPropagation();
-    this.fileOver = false;
-    let files = evt.dataTransfer.files;
+  @HostListener('drop', ['$event']) ondrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.fileHover.emit(false);
+    let files = event.dataTransfer.files;
     if (files.length > 0) {
       this.fileDropped.emit(files);
     }

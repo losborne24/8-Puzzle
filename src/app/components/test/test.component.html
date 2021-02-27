@@ -1,19 +1,4 @@
 <div class="container">
-  <div class="side-container">
-    <app-drag-and-drop></app-drag-and-drop>
-    <!--<div class="file-input">
-      <button (click)="fileInput.click()">Select Image</button>
-      <input type="file" (change)="onImageChange($event)" #fileInput hidden />
-      <input value="{{ filename ? filename : 'Text' }}" readonly />
-    </div>-->
-    <div class="single-row h-count-container">
-      <p>No. of horizontal lines :</p>
-      <input class="h-count" />
-    </div>
-    <div class="single-row v-count-container">
-      <p>No. of vertical lines :</p>
-      <input class="v-count" />
-    </div>
-  </div>
-  <div class="image-container"></div>
+  <app-drag-and-drop></app-drag-and-drop>
+  <app-drag-and-drop-example></app-drag-and-drop-example>
 </div>
