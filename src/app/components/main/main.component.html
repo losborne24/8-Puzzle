@@ -1,0 +1,10 @@
+<div class="container">
+  <app-drag-and-drop
+    *ngIf="!isImageUpload"
+    (imageFile)="onImageSelected($event)"
+  ></app-drag-and-drop>
+  <app-image-slicer
+    *ngIf="isImageUpload"
+    [imageFile]="imageFile"
+  ></app-image-slicer>
+</div>

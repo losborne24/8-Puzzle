@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-image-slicer',
@@ -8,7 +8,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class ImageSlicerComponent implements OnInit {
   @ViewChild('myCanvas', { static: false })
   myCanvas: ElementRef<HTMLCanvasElement>;
-
+  @Input() imageFile;
   // imgData: contents of image uploaded
   imgData: string | ArrayBuffer;
 
