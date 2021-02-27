@@ -9,7 +9,10 @@
     <mat-icon
       class="icon-upload"
       [inline]="true"
-      [ngClass]="fileHover && 'icon-file-hover'"
+      [ngClass]="{
+        'icon-file-hover': fileHover,
+        'icon-file-dropped': fileDropped
+      }"
       >add_photo_alternate</mat-icon
     >
   </div>
@@ -24,5 +27,11 @@
     Browse for an image
   </button>
   <!-- Hidden input for file upload-->
-  <input type="file" #inputImageUpload hidden />
+  <input
+    (change)="onFileSelected($event)"
+    type="file"
+    #inputImageUpload
+    hidden
+    accept="image/*"
+  />
 </div>

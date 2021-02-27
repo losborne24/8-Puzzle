@@ -15,6 +15,9 @@
 .icon-upload {
   transition: transform 0.5s;
 }
+.icon-file-dropped {
+  animation: rubberBand linear 1s;
+}
 .icon-file-hover {
   transform: scale(1.2);
 }
@@ -31,4 +34,33 @@
 p {
   padding: 0;
   margin: 0.5rem 0;
+}
+@keyframes rubberBand {
+  from {
+    transform: scale3d(1.2, 1.2, 1);
+  }
+
+  30% {
+    transform: scale3d(1.5, 1, 1);
+  }
+
+  40% {
+    transform: scale3d(1, 1.5, 1);
+  }
+
+  50% {
+    transform: scale3d(1.4, 1.1, 1);
+  }
+
+  65% {
+    transform: scale3d(1.2, 1.3, 1);
+  }
+
+  75% {
+    transform: scale3d(1.3, 1.2, 1);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
 }
