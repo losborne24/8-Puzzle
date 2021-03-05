@@ -1,12 +1,31 @@
 <div class="container">
-  <div class="col">
-    <button (click)="fileInput.click()">Select Image</button>
-    <input type="file" (change)="onImageChange($event)" #fileInput hidden />
-    <input value="{{ filename ? filename : 'Text' }}" readonly />
-  </div>
-  <div class="col">
-    <!--<button (click)="onSliceImage()">Slice Image</button>-->
-
+  <mat-card class="settings-container">
+    <div>
+      <p class="settings-text">Number of horizontal lines:</p>
+      <mat-slider
+        class="full-width"
+        [max]="10"
+        [min]="0"
+        [step]="1"
+        [thumbLabel]="true"
+        [tickInterval]="'auto'"
+      >
+      </mat-slider>
+    </div>
+    <div>
+      <p class="settings-text">Number of vertical lines:</p>
+      <mat-slider
+        class="full-width"
+        [max]="10"
+        [min]="0"
+        [step]="1"
+        [thumbLabel]="true"
+        [tickInterval]="'auto'"
+      >
+      </mat-slider>
+    </div>
+  </mat-card>
+  <div>
     <canvas #myCanvas></canvas>
   </div>
 </div>

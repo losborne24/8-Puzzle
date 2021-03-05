@@ -1,14 +1,44 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-image-slicer',
   templateUrl: './image-slicer.component.html',
   styleUrls: ['./image-slicer.component.scss'],
+  host: {
+    '(window:resize)': 'onResize($event)',
+  },
 })
 export class ImageSlicerComponent implements OnInit {
   @ViewChild('myCanvas', { static: false })
   myCanvas: ElementRef<HTMLCanvasElement>;
-  @Input() imageFile;
+
+  windowWidth = 0;
+  windowHeight = 0;
+
+  _imageFile;
+
+  @Input()
+  get imageFile() {
+    return this._imageFile;
+  }
+  set imageFile(imageFile) {
+    this._imageFile = imageFile;
+    this.onImageLoaded(imageFile);
+  }
+
+  canvasHeight = 0;
+  canvasWidth = 0;
+
+  maxCanvasHeight = 0;
+  maxCanvasWidth = 0;
+
   // imgData: contents of image uploaded
   imgData: string | ArrayBuffer;
 
@@ -23,17 +53,23 @@ export class ImageSlicerComponent implements OnInit {
     this.image = new Image();
   }
 
-  ngOnInit(): void {}
-  ngAfterViewInit(): void {
-    this.ctx = this.myCanvas.nativeElement.getContext('2d');
-    this.ctx.canvas.height = 500; //this.image.height;
-    this.ctx.canvas.width = 500; //this.image.width;
-    this.ctx.fillStyle = '#333333';
-    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+  ngOnInit(): void {
+    this.windowWidth = window.innerWidth;
+    this.windowHeight = window.innerHeight;
   }
-  onImageChange(event) {
+  ngAfterViewInit(): void {
+    this.maxCanvasHeight = this.windowHeight / 2;
+    this.maxCanvasWidth = this.windowWidth / 2;
+    this.ctx = this.myCanvas.nativeElement.getContext('2d');
+    // this.ctx.canvas.height = this.canvasHeight; //this.image.height;
+    //  this.ctx.canvas.width = this.canvasWidth; //this.image.width;
+    // this.ctx.fillStyle = '#333333';
+    // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+  }
+
+  onImageLoaded(file) {
     // get name and data from upload event
-    const file = event.target.files[0];
+    // const file = event.target.files[0];
     this.filename = file.name;
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -64,37 +100,53 @@ export class ImageSlicerComponent implements OnInit {
   drawImageProp() {
     const imgHeight = this.image.height;
     const imgWidth = this.image.width;
-    const canvasWidth = 500;
-    const canvasHeight = 500;
-    if (imgHeight <= canvasHeight && imgWidth <= canvasWidth) {
-      this.ctx.drawImage(
-        this.image,
-        (this.ctx.canvas.width - imgWidth) / 2,
-        (this.ctx.canvas.height - imgHeight) / 2
-      );
+    //const canvasHeight = this.canvasHeight;
+    //const canvasWidth = this.canvasWidth;
+    if (imgHeight <= this.maxCanvasHeight && imgWidth <= this.maxCanvasWidth) {
+      this.ctx.canvas.width = imgWidth;
+      this.ctx.canvas.height = imgHeight;
+      this.ctx.drawImage(this.image);
     } else {
-      const heightDiff = imgHeight / canvasHeight;
-      const widthDiff = imgWidth / canvasWidth;
+      const heightDiff = imgHeight / this.maxCanvasHeight;
+      const widthDiff = imgWidth / this.maxCanvasWidth;
       if (heightDiff > widthDiff) {
+        this.ctx.canvas.width = imgWidth / heightDiff;
+        this.ctx.canvas.height = this.maxCanvasHeight;
         this.ctx.drawImage(
           this.image,
           (this.ctx.canvas.width - imgWidth / heightDiff) / 2,
           0,
           imgWidth / heightDiff,
-          canvasHeight
+          this.maxCanvasHeight
         );
       } else {
+        this.ctx.canvas.width = this.maxCanvasWidth;
+        this.ctx.canvas.height = imgHeight / widthDiff;
         this.ctx.drawImage(
           this.image,
           0,
           (this.ctx.canvas.height - imgHeight / widthDiff) / 2,
-          canvasWidth,
+          this.maxCanvasWidth,
           imgHeight / widthDiff
         );
       }
     }
   }
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.windowWidth = event.target.innerWidth;
+    this.windowHeight = event.target.innerHeight;
+    this.maxCanvasHeight = this.windowHeight / 2;
+    this.maxCanvasWidth = this.windowWidth / 2;
+    if (this.imageFile) {
+      this.ctx = this.myCanvas.nativeElement.getContext('2d');
+      // this.ctx.canvas.height = this.canvasHeight; //this.image.height;
+      //  this.ctx.canvas.width = this.canvasWidth; //this.image.width;
+      //  this.ctx.fillStyle = '#333333';
+      //    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      this.drawImageProp();
+    }
+  }
   /*onSliceImage() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
     var imagePieces = [];
