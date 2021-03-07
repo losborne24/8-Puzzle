@@ -6,6 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import Konva from 'konva';
 
 @Component({
   selector: 'app-image-slicer',
@@ -18,7 +19,7 @@ import {
 export class ImageSlicerComponent implements OnInit {
   @ViewChild('myCanvas', { static: false })
   myCanvas: ElementRef<HTMLCanvasElement>;
-
+  stage;
   windowWidth = 0;
   windowHeight = 0;
 
@@ -33,12 +34,11 @@ export class ImageSlicerComponent implements OnInit {
     this.onImageLoaded(imageFile);
   }
 
-  canvasHeight = 0;
-  canvasWidth = 0;
-
   maxCanvasHeight = 0;
   maxCanvasWidth = 0;
 
+  hLineCount = 0;
+  vLineCount = 0;
   // imgData: contents of image uploaded
   imgData: string | ArrayBuffer;
 
@@ -56,81 +56,68 @@ export class ImageSlicerComponent implements OnInit {
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
+    this.stage = new Konva.Stage({
+      container: 'konva-container',
+      width: 0,
+      height: 0,
+    });
   }
   ngAfterViewInit(): void {
     this.maxCanvasHeight = this.windowHeight / 2;
     this.maxCanvasWidth = this.windowWidth / 2;
     this.ctx = this.myCanvas.nativeElement.getContext('2d');
-    // this.ctx.canvas.height = this.canvasHeight; //this.image.height;
-    //  this.ctx.canvas.width = this.canvasWidth; //this.image.width;
-    // this.ctx.fillStyle = '#333333';
-    // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
-
+  onHLineChange(value) {
+    this.hLineCount = value;
+  }
+  onVLineChange(value) {
+    this.vLineCount = value;
+  }
   onImageLoaded(file) {
-    // get name and data from upload event
-    // const file = event.target.files[0];
     this.filename = file.name;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = async (_event) => {
+    reader.onload = async (_) => {
       this.imgData = reader.result;
       await this.convertToString();
       this.drawImageProp();
-      /*
-      this.ctx.strokeStyle = '#FF0000';
-      this.ctx.lineWidth = 3;
-      this.ctx.beginPath();
-      this.ctx.moveTo(100, 100);
-      this.ctx.lineTo(100, 400);
-      this.ctx.stroke();*/
     };
   }
 
   convertToString() {
     this.image.src = this.imgData.toString();
   }
-  /**
-   * By Ken Fyrstenberg Nilsen
-   *
-   * drawImageProp(context, image [, x, y, width, height [,offsetX, offsetY]])
-   *
-   * If image and context are only arguments rectangle will equal canvas
-   */
+
   drawImageProp() {
     const imgHeight = this.image.height;
     const imgWidth = this.image.width;
-    //const canvasHeight = this.canvasHeight;
-    //const canvasWidth = this.canvasWidth;
-    if (imgHeight <= this.maxCanvasHeight && imgWidth <= this.maxCanvasWidth) {
-      this.ctx.canvas.width = imgWidth;
-      this.ctx.canvas.height = imgHeight;
-      this.ctx.drawImage(this.image);
+    const heightDiff = imgHeight / this.maxCanvasHeight;
+    const widthDiff = imgWidth / this.maxCanvasWidth;
+
+    if (heightDiff > widthDiff) {
+      this.ctx.canvas.width = imgWidth / heightDiff;
+      this.ctx.canvas.height = this.maxCanvasHeight;
+
+      this.ctx.drawImage(
+        this.image,
+        (this.ctx.canvas.width - imgWidth / heightDiff) / 2,
+        0,
+        imgWidth / heightDiff,
+        this.maxCanvasHeight
+      );
     } else {
-      const heightDiff = imgHeight / this.maxCanvasHeight;
-      const widthDiff = imgWidth / this.maxCanvasWidth;
-      if (heightDiff > widthDiff) {
-        this.ctx.canvas.width = imgWidth / heightDiff;
-        this.ctx.canvas.height = this.maxCanvasHeight;
-        this.ctx.drawImage(
-          this.image,
-          (this.ctx.canvas.width - imgWidth / heightDiff) / 2,
-          0,
-          imgWidth / heightDiff,
-          this.maxCanvasHeight
-        );
-      } else {
-        this.ctx.canvas.width = this.maxCanvasWidth;
-        this.ctx.canvas.height = imgHeight / widthDiff;
-        this.ctx.drawImage(
-          this.image,
-          0,
-          (this.ctx.canvas.height - imgHeight / widthDiff) / 2,
-          this.maxCanvasWidth,
-          imgHeight / widthDiff
-        );
-      }
+      this.ctx.canvas.width = this.maxCanvasWidth;
+      this.ctx.canvas.height = imgHeight / widthDiff;
+      this.ctx.drawImage(
+        this.image,
+        0,
+        (this.ctx.canvas.height - imgHeight / widthDiff) / 2,
+        this.maxCanvasWidth,
+        imgHeight / widthDiff
+      );
     }
+    this.stage.width(this.ctx.canvas.width);
+    this.stage.height(this.ctx.canvas.height);
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -139,15 +126,80 @@ export class ImageSlicerComponent implements OnInit {
     this.maxCanvasHeight = this.windowHeight / 2;
     this.maxCanvasWidth = this.windowWidth / 2;
     if (this.imageFile) {
-      this.ctx = this.myCanvas.nativeElement.getContext('2d');
-      // this.ctx.canvas.height = this.canvasHeight; //this.image.height;
-      //  this.ctx.canvas.width = this.canvasWidth; //this.image.width;
-      //  this.ctx.fillStyle = '#333333';
-      //    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       this.drawImageProp();
     }
   }
-  /*onSliceImage() {
+  onCropSquareClick() {
+    let layer = new Konva.Layer();
+    var rect1 = new Konva.Rect({
+      x: 20,
+      y: 20,
+      width: 100,
+      height: 100,
+      fill: 'rgba(255,255,255,0.2)',
+      stroke: 'black',
+      strokeWidth: 4,
+      draggable: true,
+      strokeScaleEnabled: false,
+    });
+    var rect2 = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: this.ctx.canvas.width,
+      height: this.ctx.canvas.height,
+      fill: 'rgba(0,0,0,0.2)',
+    });
+    // add the shape to the layer
+    layer.add(rect2);
+    layer.add(rect1);
+    this.stage.add(layer);
+
+    var tr1 = new Konva.Transformer({
+      nodes: [rect1],
+      keepRatio: true,
+      enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+    });
+    layer.add(tr1);
+    layer.add(tr1);
+    layer.draw();
+  }
+  onCropRectClick() {
+    let layer = new Konva.Layer();
+    var rect1 = new Konva.Rect({
+      x: 20,
+      y: 20,
+      width: 100,
+      height: 100,
+      fill: 'rgba(255,255,255,0.2)',
+      stroke: 'black',
+      strokeWidth: 4,
+      draggable: true,
+      strokeScaleEnabled: false,
+    });
+    var rect2 = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: this.ctx.canvas.width,
+      height: this.ctx.canvas.height,
+      fill: 'rgba(0,0,0,0.2)',
+    });
+    // add the shape to the layer
+    layer.add(rect2);
+    layer.add(rect1);
+    this.stage.add(layer);
+
+    var tr1 = new Konva.Transformer({
+      nodes: [rect1],
+      // ignore stroke in size calculations
+      ignoreStroke: true,
+      // manually adjust size of transformer
+      padding: 1,
+    });
+    layer.add(tr1);
+    layer.draw();
+  }
+}
+/*onSliceImage() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
     var imagePieces = [];
     const numColsToCut = 3;
@@ -179,4 +231,3 @@ export class ImageSlicerComponent implements OnInit {
     }
     this.imgData = imagePieces[0];
   }*/
-}

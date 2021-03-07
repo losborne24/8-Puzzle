@@ -1,6 +1,22 @@
 <div class="container">
   <mat-card class="settings-container">
-    <div>
+    <button
+      mat-icon-button
+      color="primary"
+      aria-label="Crop square"
+      (click)="onCropSquareClick()"
+    >
+      <mat-icon>crop_square</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="primary"
+      aria-label="Crop rectangle"
+      (click)="onCropRectClick()"
+    >
+      <mat-icon>crop_portrait</mat-icon>
+    </button>
+    <!-- <div>
       <p class="settings-text">Number of horizontal lines:</p>
       <mat-slider
         class="full-width"
@@ -9,6 +25,7 @@
         [step]="1"
         [thumbLabel]="true"
         [tickInterval]="'auto'"
+        (valueChange)="onHLineChange($event)"
       >
       </mat-slider>
     </div>
@@ -21,11 +38,13 @@
         [step]="1"
         [thumbLabel]="true"
         [tickInterval]="'auto'"
+        (valueChange)="onVLineChange($event)"
       >
       </mat-slider>
-    </div>
+    </div>-->
   </mat-card>
-  <div>
-    <canvas #myCanvas></canvas>
+  <div class="canvas-container">
+    <canvas class="canvas" #myCanvas></canvas>
+    <div id="konva-container"></div>
   </div>
 </div>
