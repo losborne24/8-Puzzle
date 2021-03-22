@@ -37,7 +37,7 @@ export class DraggableDirective implements OnInit {
     interact(this.element.nativeElement)
       .resizable({
         // resize from all edges and corners
-        edges: { left: true, right: true, bottom: true, top: true },
+        edges: { left: false, right: true, bottom: true, top: false },
 
         listeners: {
           move(event) {
@@ -101,65 +101,5 @@ export class DraggableDirective implements OnInit {
           }),
         ],
       });
-    /*interact(this.element.nativeElement)
-      .draggable({
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: 'parent',
-          }),
-        ],
-        listeners: {
-          start(event) {
-            console.log(event.type, event.target);
-          },
-          move(event) {
-            position.x += event.dx;
-            position.y += event.dy;
-
-            event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
-          },
-        },
-      })
-      .resizable({
-        edges: { top: true, left: true, bottom: true, right: true },
-        listeners: {
-          move: function (event) {
-            let { x, y } = event.target.dataset;
-
-            x = (parseFloat(x) || 0) + event.deltaRect.left;
-            y = (parseFloat(y) || 0) + event.deltaRect.top;
-
-            Object.assign(event.target.style, {
-              width: `${event.rect.width}px`,
-              height: `${event.rect.height}px`,
-              transform: `translate(${x}px, ${y}px)`,
-            });
-
-            Object.assign(event.target.dataset, { x, y });
-          },
-        },
-        modifiers: [
-          interact.modifiers.aspectRatio({
-            // make sure the width is always double the height
-            ratio: 1,
-            // also restrict the size by nesting another modifier
-            modifiers: [interact.modifiers.restrictSize({ max: 'parent' })],
-          }),
-        ],
-      });*/
   }
-  /* dragMoveListener(event) {
-    var target = event.target;
-    // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-    // translate the element
-    target.style.webkitTransform = target.style.transform =
-      'translate(' + x + 'px, ' + y + 'px)';
-
-    // update the posiion attributes
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
-  }*/
 }

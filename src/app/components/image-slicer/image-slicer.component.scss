@@ -27,8 +27,25 @@
   transform: translateX(-50%);
 }
 .grid-container {
+  border-radius: 0.1rem;
+  width: 200px;
+  height: 200px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.box {
+  border: 0.3rem solid white;
   box-sizing: border-box;
-  width: 5rem;
-  height: 5rem;
-  border: 1rem solid black;
+}
+.box:nth-child(-n + 3) {
+  border-top: 0.6rem solid white;
+}
+.box:nth-child(3n-2) {
+  border-left: 0.6rem solid white;
+}
+.box:nth-child(3n) {
+  border-right: 0.6rem solid white;
+}
+.box:nth-child(n + 7) {
+  border-bottom: 0.6rem solid white;
 }
