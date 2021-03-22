@@ -1,10 +1,15 @@
 <div class="container">
   <app-drag-and-drop
-    *ngIf="!isImageUpload"
+    *ngIf="screenDisplayed === 'UPLOAD'"
     (imageFile)="onImageSelected($event)"
   ></app-drag-and-drop>
   <app-image-slicer
-    *ngIf="isImageUpload"
+    *ngIf="screenDisplayed === 'CROP'"
     [imageFile]="imageFile"
+    (images)="onImageCrop($event)"
   ></app-image-slicer>
+  <app-puzzle
+    *ngIf="screenDisplayed === 'PUZZLE'"
+    [images]="images"
+  ></app-puzzle>
 </div>

@@ -6,14 +6,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  isImageUpload = false;
+  screenDisplayed = 'UPLOAD';
   imageFile;
+  images;
   constructor() {}
 
   ngOnInit(): void {}
 
   onImageSelected(image) {
     this.imageFile = image;
-    this.isImageUpload = true;
+    this.screenDisplayed = 'CROP';
+  }
+  onImageCrop(images) {
+    this.screenDisplayed = 'PUZZLE';
+    this.images = images;
+    console.log(images);
   }
 }

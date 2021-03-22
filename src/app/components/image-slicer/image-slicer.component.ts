@@ -2,12 +2,13 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
-import * as interact from 'interactjs';
 
 @Component({
   selector: 'app-image-slicer',
@@ -22,6 +23,9 @@ export class ImageSlicerComponent implements OnInit {
   myCanvas: ElementRef<HTMLCanvasElement>;
   @ViewChild('ghostContainer', { static: false })
   ghostContainer: ElementRef<HTMLCanvasElement>;
+  @ViewChild('grid', { static: false }) grid: ElementRef;
+
+  @Output() images = new EventEmitter<any>();
 
   windowWidth = 0;
   windowHeight = 0;
@@ -119,37 +123,41 @@ export class ImageSlicerComponent implements OnInit {
     this.canvasWidth = this.ctx.canvas.width;
     this.canvasHeight = this.ctx.canvas.height;
   }
-}
+  onComplete() {
+    const pieceSize = this.grid.nativeElement.offsetWidth / 3;
+    const style = window.getComputedStyle(this.grid.nativeElement);
+    const matrix = new WebKitCSSMatrix(style.transform);
+    const gridTranslationX = matrix.m41 > 0 ? matrix.m41 : 0;
+    const gridTranslationY = matrix.m42 > 0 ? matrix.m42 : 0;
+    console.log('x: ' + gridTranslationX);
+    console.log('y: ' + gridTranslationY);
 
-/*onSliceImage() {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
     var imagePieces = [];
-    const numColsToCut = 3;
-    const numRowsToCut = 3;
-    const widthOfOnePiece = 200;
-    const heightOfOnePiece = 200;
+    const colsToCut = 3;
+    const rowsToCut = 3;
+    const pieceWidth = pieceSize;
+    const pieceHeight = pieceSize;
     const image = new Image();
-    image.src = this.imgData.toString();
+    image.src = this.ctx.canvas.toDataURL();
 
-    for (var x = 0; x < numColsToCut; x++) {
-      for (var y = 0; y < numRowsToCut; y++) {
+    for (var x = 0; x < colsToCut; x++) {
+      for (var y = 0; y < rowsToCut; y++) {
         var canvas = document.createElement('canvas');
-        canvas.width = widthOfOnePiece;
-        canvas.height = heightOfOnePiece;
         var context = canvas.getContext('2d');
         context.drawImage(
           image,
-          x * widthOfOnePiece,
-          y * heightOfOnePiece,
-          widthOfOnePiece,
-          heightOfOnePiece,
+          x * pieceWidth + gridTranslationX,
+          y * pieceHeight + gridTranslationY,
+          pieceWidth,
+          pieceHeight,
           0,
           0,
-          canvas.width,
-          canvas.height
+          pieceWidth,
+          pieceHeight
         );
         imagePieces.push(canvas.toDataURL());
       }
     }
-    this.imgData = imagePieces[0];
-  }*/
+    this.images.emit(imagePieces);
+  }
+}

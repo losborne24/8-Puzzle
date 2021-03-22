@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { DraggableDirective } from './directives/draggable.directive';
+import { PuzzleComponent } from './components/puzzle/puzzle.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DraggableDirective } from './directives/draggable.directive';
     DragAndDropComponent,
     MainComponent,
     DraggableDirective,
+    PuzzleComponent,
   ],
   imports: [
     BrowserModule,

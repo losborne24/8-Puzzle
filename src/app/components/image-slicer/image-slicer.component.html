@@ -7,7 +7,7 @@
       [style.width]="canvasWidth + 'px'"
       [style.height]="canvasHeight + 'px'"
     >
-      <div class="grid-container" appDraggable>
+      <div #grid class="grid-container" appDraggable>
         <div class="box"></div>
         <div class="box"></div>
         <div class="box"></div>
@@ -21,6 +21,8 @@
     </div>
   </div>
   <div *ngIf="ctx">
-    <button mat-raised-button color="primary">Done</button>
+    <button mat-raised-button color="primary" (click)="onComplete()">
+      Done
+    </button>
   </div>
 </div>
