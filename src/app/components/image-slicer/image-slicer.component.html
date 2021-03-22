@@ -1,50 +1,15 @@
 <div class="container">
-  <mat-card class="settings-container">
-    <button
-      mat-icon-button
-      color="primary"
-      aria-label="Crop square"
-      (click)="onCropSquareClick()"
-    >
-      <mat-icon>crop_square</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      color="primary"
-      aria-label="Crop rectangle"
-      (click)="onCropRectClick()"
-    >
-      <mat-icon>crop_portrait</mat-icon>
-    </button>
-    <!-- <div>
-      <p class="settings-text">Number of horizontal lines:</p>
-      <mat-slider
-        class="full-width"
-        [max]="10"
-        [min]="0"
-        [step]="1"
-        [thumbLabel]="true"
-        [tickInterval]="'auto'"
-        (valueChange)="onHLineChange($event)"
-      >
-      </mat-slider>
-    </div>
-    <div>
-      <p class="settings-text">Number of vertical lines:</p>
-      <mat-slider
-        class="full-width"
-        [max]="10"
-        [min]="0"
-        [step]="1"
-        [thumbLabel]="true"
-        [tickInterval]="'auto'"
-        (valueChange)="onVLineChange($event)"
-      >
-      </mat-slider>
-    </div>-->
-  </mat-card>
   <div class="canvas-container">
     <canvas class="canvas" #myCanvas></canvas>
-    <div id="konva-container"></div>
+
+    <div
+      *ngIf="ctx"
+      #ghostContainer
+      class="ghost-container"
+      [style.width]="ctx.canvas.width + 'px'"
+      [style.height]="ctx.canvas.height + 'px'"
+    >
+      <div class="grid-container" appDraggable></div>
+    </div>
   </div>
 </div>

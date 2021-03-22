@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -6,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import Konva from 'konva';
+import * as interact from 'interactjs';
 
 @Component({
   selector: 'app-image-slicer',
@@ -19,12 +20,12 @@ import Konva from 'konva';
 export class ImageSlicerComponent implements OnInit {
   @ViewChild('myCanvas', { static: false })
   myCanvas: ElementRef<HTMLCanvasElement>;
-  stage;
+  @ViewChild('ghostContainer', { static: false })
+  ghostContainer: ElementRef<HTMLCanvasElement>;
+
   windowWidth = 0;
   windowHeight = 0;
-
   _imageFile;
-
   @Input()
   get imageFile() {
     return this._imageFile;
@@ -37,8 +38,6 @@ export class ImageSlicerComponent implements OnInit {
   maxCanvasHeight = 0;
   maxCanvasWidth = 0;
 
-  hLineCount = 0;
-  vLineCount = 0;
   // imgData: contents of image uploaded
   imgData: string | ArrayBuffer;
 
@@ -49,29 +48,29 @@ export class ImageSlicerComponent implements OnInit {
   ctx; //: CanvasRenderingContext2D;
   image: HTMLImageElement;
 
-  constructor() {
+  constructor(private changeDetector: ChangeDetectorRef) {
     this.image = new Image();
   }
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
-    this.stage = new Konva.Stage({
-      container: 'konva-container',
-      width: 0,
-      height: 0,
-    });
   }
   ngAfterViewInit(): void {
     this.maxCanvasHeight = this.windowHeight / 2;
     this.maxCanvasWidth = this.windowWidth / 2;
     this.ctx = this.myCanvas.nativeElement.getContext('2d');
+    this.changeDetector.detectChanges();
   }
-  onHLineChange(value) {
-    this.hLineCount = value;
-  }
-  onVLineChange(value) {
-    this.vLineCount = value;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.windowWidth = event.target.innerWidth;
+    this.windowHeight = event.target.innerHeight;
+    this.maxCanvasHeight = this.windowHeight / 2;
+    this.maxCanvasWidth = this.windowWidth / 2;
+    if (this.imageFile) {
+      this.drawImageProp();
+    }
   }
   onImageLoaded(file) {
     this.filename = file.name;
@@ -83,7 +82,6 @@ export class ImageSlicerComponent implements OnInit {
       this.drawImageProp();
     };
   }
-
   convertToString() {
     this.image.src = this.imgData.toString();
   }
@@ -116,89 +114,9 @@ export class ImageSlicerComponent implements OnInit {
         imgHeight / widthDiff
       );
     }
-    this.stage.width(this.ctx.canvas.width);
-    this.stage.height(this.ctx.canvas.height);
-  }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.windowWidth = event.target.innerWidth;
-    this.windowHeight = event.target.innerHeight;
-    this.maxCanvasHeight = this.windowHeight / 2;
-    this.maxCanvasWidth = this.windowWidth / 2;
-    if (this.imageFile) {
-      this.drawImageProp();
-    }
-  }
-  onCropSquareClick() {
-    let layer = new Konva.Layer();
-    var rect1 = new Konva.Rect({
-      x: 20,
-      y: 20,
-      width: 100,
-      height: 100,
-      fill: 'rgba(255,255,255,0.2)',
-      stroke: 'black',
-      strokeWidth: 4,
-      draggable: true,
-      strokeScaleEnabled: false,
-    });
-    var rect2 = new Konva.Rect({
-      x: 0,
-      y: 0,
-      width: this.ctx.canvas.width,
-      height: this.ctx.canvas.height,
-      fill: 'rgba(0,0,0,0.2)',
-    });
-    // add the shape to the layer
-    layer.add(rect2);
-    layer.add(rect1);
-    this.stage.add(layer);
-
-    var tr1 = new Konva.Transformer({
-      nodes: [rect1],
-      keepRatio: true,
-      enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
-    });
-    layer.add(tr1);
-    layer.add(tr1);
-    layer.draw();
-  }
-  onCropRectClick() {
-    let layer = new Konva.Layer();
-    var rect1 = new Konva.Rect({
-      x: 20,
-      y: 20,
-      width: 100,
-      height: 100,
-      fill: 'rgba(255,255,255,0.2)',
-      stroke: 'black',
-      strokeWidth: 4,
-      draggable: true,
-      strokeScaleEnabled: false,
-    });
-    var rect2 = new Konva.Rect({
-      x: 0,
-      y: 0,
-      width: this.ctx.canvas.width,
-      height: this.ctx.canvas.height,
-      fill: 'rgba(0,0,0,0.2)',
-    });
-    // add the shape to the layer
-    layer.add(rect2);
-    layer.add(rect1);
-    this.stage.add(layer);
-
-    var tr1 = new Konva.Transformer({
-      nodes: [rect1],
-      // ignore stroke in size calculations
-      ignoreStroke: true,
-      // manually adjust size of transformer
-      padding: 1,
-    });
-    layer.add(tr1);
-    layer.draw();
   }
 }
+
 /*onSliceImage() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
     var imagePieces = [];
