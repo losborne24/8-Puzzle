@@ -35,6 +35,8 @@ export class ImageSlicerComponent implements OnInit {
     this.onImageLoaded(imageFile);
   }
 
+  canvasWidth = 0;
+  canvasHeight = 0;
   maxCanvasHeight = 0;
   maxCanvasWidth = 0;
 
@@ -114,6 +116,8 @@ export class ImageSlicerComponent implements OnInit {
         imgHeight / widthDiff
       );
     }
+    this.canvasWidth = this.ctx.canvas.width;
+    this.canvasHeight = this.ctx.canvas.height;
   }
 }
 

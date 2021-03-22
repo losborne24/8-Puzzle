@@ -6,11 +6,15 @@ import {
   Input,
   OnInit,
   Output,
+  Renderer2,
 } from '@angular/core';
 import * as interact from 'interactjs/dist/interact.js';
 
 @Directive({
   selector: '[appDraggable]',
+  host: {
+    '(window:resize)': 'onResize($event)',
+  },
 })
 export class DraggableDirective implements OnInit {
   @Input()
@@ -24,13 +28,38 @@ export class DraggableDirective implements OnInit {
 
   private currentlyDragged = false;
 
-  constructor(private element: ElementRef) {}
+  constructor(private element: ElementRef, private renderer: Renderer2) {}
 
   @HostListener('click', ['$event'])
   public onClick(event: any): void {
     if (!this.currentlyDragged) {
       this.draggableClick.emit();
     }
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    let size =
+      event.target.innerWidth < event.target.innerHeight
+        ? event.target.innerWidth
+        : event.target.innerHeight;
+
+    this.renderer.setStyle(
+      this.element.nativeElement,
+      'width',
+      `${size / 8}px`
+    );
+    this.renderer.setStyle(
+      this.element.nativeElement,
+      'height',
+      `${size / 8}px`
+    );
+    this.renderer.setStyle(
+      this.element.nativeElement,
+      'transform',
+      'translate(0px,0px)'
+    );
+    this.renderer.setAttribute(this.element.nativeElement, 'data-x', '0');
+    this.renderer.setAttribute(this.element.nativeElement, 'data-y', '0');
   }
 
   ngOnInit(): void {
@@ -70,7 +99,7 @@ export class DraggableDirective implements OnInit {
                 outer: 'parent',
               }), // minimum size
               interact.modifiers.restrictSize({
-                min: { width: 100, height: 100 },
+                min: { width: 9, height: 9 },
               }),
             ],
           }),

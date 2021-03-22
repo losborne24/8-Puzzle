@@ -1,25 +1,26 @@
 <div class="container">
-  <div class="canvas-container">
+  <div class="canvas-container" [style.height]="canvasHeight + 'px'">
     <canvas class="canvas" #myCanvas></canvas>
-
     <div
-      *ngIf="ctx"
       #ghostContainer
       class="ghost-container"
-      [style.width]="ctx.canvas.width + 'px'"
-      [style.height]="ctx.canvas.height + 'px'"
+      [style.width]="canvasWidth + 'px'"
+      [style.height]="canvasHeight + 'px'"
     >
       <div class="grid-container" appDraggable>
-        <div class="box box-left box-top"></div>
-        <div class="box box-top"></div>
-        <div class="box box-right box-top"></div>
-        <div class="box box-left"></div>
         <div class="box"></div>
-        <div class="box box-right"></div>
-        <div class="box box-left box-bottom"></div>
-        <div class="box box-bottom"></div>
-        <div class="box box-right box-bottom"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
       </div>
     </div>
+  </div>
+  <div *ngIf="ctx">
+    <button mat-raised-button color="primary">Done</button>
   </div>
 </div>
