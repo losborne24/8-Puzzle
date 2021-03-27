@@ -17,12 +17,6 @@ import * as interact from 'interactjs/dist/interact.js';
   },
 })
 export class DraggableDirective implements OnInit {
-  @Input()
-  model: any;
-
-  @Input()
-  options: any;
-
   @Output()
   draggableClick = new EventEmitter();
 

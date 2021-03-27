@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2px;
+  background-color: #dcdcdc;
+  border: #dcdcdc 0.3rem solid;
+  border-radius: 0.5rem;
+}
+.item {
+  background-color: #444444;
+  border-radius: 8px;
+  user-select: none;
+  display: flex;
+}
+.item-img {
+  border-radius: 8px;
+  touch-action: none;
+}

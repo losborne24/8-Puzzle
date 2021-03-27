@@ -1,1 +1,19 @@
-<p>puzzle works!</p>
+<div class="container">
+  <div
+    class="grid"
+    [style.height]="gridSize + 'px'"
+    [style.width]="gridSize + 'px'"
+    *ngIf="gridImages.length === 9"
+  >
+    <div class="item" *ngFor="let image of gridImages; let i = index">
+      <img
+        class="item-img"
+        *ngIf="image"
+        [src]="image"
+        appDraggableGridItem
+        [appGridPos]="i"
+        [appEmptyCell]="emptyPos"
+      />
+    </div>
+  </div>
+</div>

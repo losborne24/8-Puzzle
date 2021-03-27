@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { DraggableDirective } from './directives/draggable.directive';
 import { PuzzleComponent } from './components/puzzle/puzzle.component';
+import { DraggableGridItemDirective } from './directives/draggable-grid-item.directive';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { PuzzleComponent } from './components/puzzle/puzzle.component';
     MainComponent,
     DraggableDirective,
     PuzzleComponent,
+    DraggableGridItemDirective,
   ],
   imports: [
     BrowserModule,

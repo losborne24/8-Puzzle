@@ -70,8 +70,8 @@ export class ImageSlicerComponent implements OnInit {
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.windowWidth = event.target.innerWidth;
-    this.windowHeight = event.target.innerHeight;
+    this.windowWidth = window.innerWidth;
+    this.windowHeight = window.innerHeight;
     this.maxCanvasHeight = this.windowHeight / 2;
     this.maxCanvasWidth = this.windowWidth / 2;
     if (this.imageFile) {
@@ -138,26 +138,30 @@ export class ImageSlicerComponent implements OnInit {
     const pieceWidth = pieceSize;
     const pieceHeight = pieceSize;
     const image = new Image();
-    image.src = this.ctx.canvas.toDataURL();
 
-    for (var x = 0; x < colsToCut; x++) {
+    image.src = this.ctx.canvas.toDataURL();
+    setTimeout(() => {
       for (var y = 0; y < rowsToCut; y++) {
-        var canvas = document.createElement('canvas');
-        var context = canvas.getContext('2d');
-        context.drawImage(
-          image,
-          x * pieceWidth + gridTranslationX,
-          y * pieceHeight + gridTranslationY,
-          pieceWidth,
-          pieceHeight,
-          0,
-          0,
-          pieceWidth,
-          pieceHeight
-        );
-        imagePieces.push(canvas.toDataURL());
+        for (var x = 0; x < colsToCut; x++) {
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+          canvas.width = pieceWidth;
+          canvas.height = pieceHeight;
+          context.drawImage(
+            image,
+            x * pieceWidth + gridTranslationX,
+            y * pieceHeight + gridTranslationY,
+            pieceWidth,
+            pieceHeight,
+            0,
+            0,
+            pieceWidth,
+            pieceHeight
+          );
+          imagePieces.push(canvas.toDataURL());
+        }
       }
-    }
-    this.images.emit(imagePieces);
+      this.images.emit(imagePieces);
+    }, 0);
   }
 }
