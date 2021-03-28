@@ -27,13 +27,12 @@ export class PuzzleComponent implements OnInit {
         : window.innerHeight / 2;
     for (let i = 0; i < 9; i++) {
       this.gridData.push({
-        gridPos: 8 - i,
+        gridPos: i,
         correctPos: i,
       });
     }
     for (let i = 0; i < 9; i++) {
       const gridItem = this.gridData.find((obj) => obj.gridPos === i);
-      console.log(gridItem);
       if (i === this.removedPos) {
         this.gridImages.push(null);
       } else {
@@ -52,19 +51,28 @@ export class PuzzleComponent implements OnInit {
   hasEmptyCellChanged(hasChanged, position) {
     if (hasChanged) {
       // update grid data
-      const newPosCell = this.gridData.find(
+      const newPosCell = this.gridData.find((obj) => obj.gridPos === position);
+      newPosCell.gridPos = this.emptyPos;
+      const newEmptyPosCell = this.gridData.find(
         (obj) => obj.gridPos === this.emptyPos
       );
-      newPosCell.gridPos = position;
-      const newEmptyPosCell = this.gridData.find(
-        (obj) => obj.gridPos === position
-      );
-      newEmptyPosCell.gridPos = this.emptyPos;
+      newEmptyPosCell.gridPos = position;
 
       // update grid images
-      this.gridImages[this.emptyPos] = this.images[newEmptyPosCell.correctPos];
+      this.gridImages[this.emptyPos] = this.images[newPosCell.correctPos];
       this.gridImages[position] = null;
       this.emptyPos = position;
+      const isComplete = this.isPuzzleComplete();
+      console.log(isComplete);
     }
+  }
+  isPuzzleComplete() {
+    let complete = true;
+    this.gridData.forEach((cell) => {
+      if (cell.gridPos !== cell.correctPos) {
+        complete = false;
+      }
+    });
+    return complete;
   }
 }

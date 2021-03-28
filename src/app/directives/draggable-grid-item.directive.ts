@@ -164,7 +164,7 @@ export class DraggableGridItemDirective {
           var target = event.target;
           var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
           var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-          if (Math.abs(x) * 2 > size || Math.abs(y) * 2 > size) {
+          if (Math.abs(x) * 3 > size || Math.abs(y) * 3 > size) {
             hasEmptyCellChanged.emit(true);
           }
 
