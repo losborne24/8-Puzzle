@@ -49,7 +49,8 @@ export class DraggableGridItemDirective {
   restrictionBox;
   rect;
   // moves = ['up', 'right', 'down', 'left'];
-  @Output() hasEmptyCellChanged = new EventEmitter<boolean>();
+  @Output()
+  hasEmptyCellChanged = new EventEmitter<any>();
 
   draggableClick = new EventEmitter();
 
@@ -69,17 +70,6 @@ export class DraggableGridItemDirective {
       event.target.innerWidth < event.target.innerHeight
         ? event.target.innerWidth
         : event.target.innerHeight;
-
-    this.renderer.setStyle(
-      this.element.nativeElement,
-      'width',
-      `${size / 8}px`
-    );
-    this.renderer.setStyle(
-      this.element.nativeElement,
-      'height',
-      `${size / 8}px`
-    );
     this.renderer.setStyle(
       this.element.nativeElement,
       'transform',
@@ -87,6 +77,7 @@ export class DraggableGridItemDirective {
     );
     this.renderer.setAttribute(this.element.nativeElement, 'data-x', '0');
     this.renderer.setAttribute(this.element.nativeElement, 'data-y', '0');
+    this.updateElementDraggable();
   }
 
   ngOnInit(): void {}
@@ -102,7 +93,6 @@ export class DraggableGridItemDirective {
     setTimeout(() => {
       this.rect = this.element.nativeElement.getBoundingClientRect();
       const size = this.rect.width;
-      console.log(size);
       switch (direction) {
         case 0:
           this.restrictionBox = interact.modifiers.restrictRect({
@@ -110,48 +100,48 @@ export class DraggableGridItemDirective {
               x: this.rect.x - size - 2,
               y: 0,
               width: size * 2 + 2,
-              height: size,
+              height: size * 2 + 2,
             },
           });
-          this.updateInteract('left');
+          this.updateInteract('left', size, this.hasEmptyCellChanged);
           break;
-        /*   case 1:
-        this.restrictionBox = interact.modifiers.restrict({
-          restriction: {
-            x: x, // - size * 1.5,
-            y: y,
-            width: size,
-            height: size * 2,
-          },
-        });
-        this.updateInteract('up');
-        break;
-      case 2:
-        this.restrictionBox = interact.modifiers.restrict({
-          restriction: {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-          },
-        });
-        this.updateInteract('right');
-        break;
-      case 3:
-        this.restrictionBox = interact.modifiers.restrict({
-          restriction: {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-          },
-        });
-        this.updateInteract('down');
-        break;*/
+        case 1:
+          this.restrictionBox = interact.modifiers.restrictRect({
+            restriction: {
+              x: 0,
+              y: this.rect.y - size - 2,
+              width: size * 2 + 2,
+              height: size * 2 + 2,
+            },
+          });
+          this.updateInteract('up', size, this.hasEmptyCellChanged);
+          break;
+        case 2:
+          this.restrictionBox = interact.modifiers.restrictRect({
+            restriction: {
+              x: this.rect.x + 2,
+              y: 0,
+              width: size * 2 + 2,
+              height: size * 2 + 2,
+            },
+          });
+          this.updateInteract('right', size, this.hasEmptyCellChanged);
+          break;
+        case 3:
+          this.restrictionBox = interact.modifiers.restrictRect({
+            restriction: {
+              x: 0,
+              y: this.rect.y + 2,
+              width: size * 2 + 2,
+              height: size * 2 + 2,
+            },
+          });
+          this.updateInteract('down', size, this.hasEmptyCellChanged);
+          break;
       }
     }, 0);
   }
-  updateInteract(direction) {
+  updateInteract(direction, size, hasEmptyCellChanged) {
     let axis = direction === 'left' || direction === 'right' ? 'x' : 'y';
     interact(this.element.nativeElement).draggable({
       lockAxis: axis,
@@ -174,9 +164,13 @@ export class DraggableGridItemDirective {
           var target = event.target;
           var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
           var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+          if (Math.abs(x) * 2 > size || Math.abs(y) * 2 > size) {
+            hasEmptyCellChanged.emit(true);
+          }
 
           target.style.webkitTransform = target.style.transform =
             'translate(' + 0 + 'px, ' + 0 + 'px)';
+
           target.setAttribute('data-x', 0);
           target.setAttribute('data-y', 0);
         },

@@ -27,12 +27,13 @@ export class PuzzleComponent implements OnInit {
         : window.innerHeight / 2;
     for (let i = 0; i < 9; i++) {
       this.gridData.push({
-        gridPos: i,
+        gridPos: 8 - i,
         correctPos: i,
       });
     }
     for (let i = 0; i < 9; i++) {
       const gridItem = this.gridData.find((obj) => obj.gridPos === i);
+      console.log(gridItem);
       if (i === this.removedPos) {
         this.gridImages.push(null);
       } else {
@@ -47,5 +48,23 @@ export class PuzzleComponent implements OnInit {
       window.innerWidth < event.target.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
+  }
+  hasEmptyCellChanged(hasChanged, position) {
+    if (hasChanged) {
+      // update grid data
+      const newPosCell = this.gridData.find(
+        (obj) => obj.gridPos === this.emptyPos
+      );
+      newPosCell.gridPos = position;
+      const newEmptyPosCell = this.gridData.find(
+        (obj) => obj.gridPos === position
+      );
+      newEmptyPosCell.gridPos = this.emptyPos;
+
+      // update grid images
+      this.gridImages[this.emptyPos] = this.images[newEmptyPosCell.correctPos];
+      this.gridImages[position] = null;
+      this.emptyPos = position;
+    }
   }
 }
