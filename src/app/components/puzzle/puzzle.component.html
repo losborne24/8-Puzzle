@@ -16,7 +16,7 @@
       >
         <img class="item-img" [src]="image" />
         <h1 *ngIf="this.isShowNumbers" class="txt-correct-pos">
-          {{ this.gridData[i] }}
+          {{ gridData[i] < removedPos ? gridData[i] + 1 : gridData[i] }}
         </h1>
       </div>
     </div>

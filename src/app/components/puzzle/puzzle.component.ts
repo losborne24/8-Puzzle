@@ -10,25 +10,22 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 })
 export class PuzzleComponent implements OnInit {
   @Input() images;
-  gridData = [];
+  gridData: Array<number>;
   gridImages = [];
   gridSize = 0;
   emptyPos;
+  removedPos;
   removedPosOptions = [0, 2, 6, 8];
-  removedPos: number;
   isShowNumbers = false;
   constructor() {}
 
   ngOnInit(): void {
-    this.removedPos = 0; // this.removedPosOptions[Math.floor(Math.random() * 4)];
-    this.emptyPos = this.removedPos;
     this.gridSize =
       window.innerWidth < window.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
-    for (let i = 0; i < 9; i++) {
-      this.gridData.push(8 - i);
-    }
+
+    this.shuffleItems();
     for (let i = 0; i < 9; i++) {
       if (i === this.removedPos) {
         this.gridImages.push(null);
@@ -44,6 +41,42 @@ export class PuzzleComponent implements OnInit {
       window.innerWidth < event.target.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
+  }
+  shuffleItems() {
+    this.removedPos = this.removedPosOptions[Math.floor(Math.random() * 4)]; // 0, 2, 6, 8
+    this.emptyPos = this.removedPos;
+    this.gridData = [];
+    for (let i = 0; i < 9; i++) {
+      if (i !== this.emptyPos) {
+        this.gridData.push(i);
+      }
+    }
+    let isSolvable = false;
+    while (!isSolvable) {
+      let inversions = 0;
+      this.shuffleArray(this.gridData);
+      for (let i = 0; i < 8; i++) {
+        for (let j = i + 1; j < 8; j++) {
+          if (this.gridData[i] > this.gridData[j]) {
+            inversions++;
+          }
+        }
+      }
+      if (inversions % 2 === 0) {
+        isSolvable = true;
+        this.gridData.splice(this.emptyPos, 0, this.emptyPos);
+
+        break;
+      }
+    }
+  }
+  shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
   }
   hasEmptyCellChanged(hasChanged, position) {
     if (hasChanged) {
