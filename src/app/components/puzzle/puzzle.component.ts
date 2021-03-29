@@ -16,6 +16,7 @@ export class PuzzleComponent implements OnInit {
   emptyPos;
   removedPosOptions = [0, 2, 6, 8];
   removedPos: number;
+  isShowNumbers = false;
   constructor() {}
 
   ngOnInit(): void {
@@ -26,17 +27,13 @@ export class PuzzleComponent implements OnInit {
         ? window.innerWidth / 2
         : window.innerHeight / 2;
     for (let i = 0; i < 9; i++) {
-      this.gridData.push({
-        gridPos: i,
-        correctPos: i,
-      });
+      this.gridData.push(8 - i);
     }
     for (let i = 0; i < 9; i++) {
-      const gridItem = this.gridData.find((obj) => obj.gridPos === i);
       if (i === this.removedPos) {
         this.gridImages.push(null);
       } else {
-        this.gridImages.push(this.images[gridItem.correctPos]);
+        this.gridImages.push(this.images[this.gridData[i]]);
       }
     }
   }
@@ -47,20 +44,17 @@ export class PuzzleComponent implements OnInit {
       window.innerWidth < event.target.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
-    console.log(this.gridSize);
   }
   hasEmptyCellChanged(hasChanged, position) {
     if (hasChanged) {
       // update grid data
-      const newPosCell = this.gridData.find((obj) => obj.gridPos === position);
-      newPosCell.gridPos = this.emptyPos;
-      const newEmptyPosCell = this.gridData.find(
-        (obj) => obj.gridPos === this.emptyPos
-      );
-      newEmptyPosCell.gridPos = position;
-
+      const temp = this.gridData[this.emptyPos];
+      this.gridData[this.emptyPos] = this.gridData[position];
+      this.gridData[position] = temp;
       // update grid images
-      this.gridImages[this.emptyPos] = this.images[newPosCell.correctPos];
+      this.gridImages[this.emptyPos] = this.images[
+        this.gridData[this.emptyPos]
+      ];
       this.gridImages[position] = null;
       this.emptyPos = position;
       const isComplete = this.isPuzzleComplete();
@@ -69,11 +63,15 @@ export class PuzzleComponent implements OnInit {
   }
   isPuzzleComplete() {
     let complete = true;
-    this.gridData.forEach((cell) => {
-      if (cell.gridPos !== cell.correctPos) {
+    for (let i = 0; i < 9; i++) {
+      if (i !== this.gridData[i]) {
         complete = false;
+        return complete;
       }
-    });
+    }
     return complete;
+  }
+  onToggleNumbers() {
+    this.isShowNumbers = !this.isShowNumbers;
   }
 }

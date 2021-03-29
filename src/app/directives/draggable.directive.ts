@@ -40,12 +40,12 @@ export class DraggableDirective implements OnInit {
     this.renderer.setStyle(
       this.element.nativeElement,
       'width',
-      `${size / 8}px`
+      `${size * 0.225}px`
     );
     this.renderer.setStyle(
       this.element.nativeElement,
       'height',
-      `${size / 8}px`
+      `${size * 0.225}px`
     );
     this.renderer.setStyle(
       this.element.nativeElement,

@@ -6,15 +6,24 @@
     [style.width]="gridSize + 'px'"
   >
     <div class="item" *ngFor="let image of gridImages; let i = index">
-      <img
-        class="item-img"
+      <div
         *ngIf="image"
-        [src]="image"
+        class="img-container"
         appDraggableGridItem
         [appGridPos]="i"
         [appEmptyCell]="emptyPos"
         (hasEmptyCellChanged)="hasEmptyCellChanged($event, i)"
-      />
+      >
+        <img class="item-img" [src]="image" />
+        <h1 *ngIf="this.isShowNumbers" class="txt-correct-pos">
+          {{ this.gridData[i] }}
+        </h1>
+      </div>
     </div>
+  </div>
+  <div class="btn-container">
+    <button mat-raised-button color="primary" (click)="onToggleNumbers()">
+      Toggle Numbers
+    </button>
   </div>
 </div>
