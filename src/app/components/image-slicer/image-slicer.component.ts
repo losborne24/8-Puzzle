@@ -129,8 +129,6 @@ export class ImageSlicerComponent implements OnInit {
     const matrix = new WebKitCSSMatrix(style.transform);
     const gridTranslationX = matrix.m41 > 0 ? matrix.m41 : 0;
     const gridTranslationY = matrix.m42 > 0 ? matrix.m42 : 0;
-    console.log('x: ' + gridTranslationX);
-    console.log('y: ' + gridTranslationY);
 
     var imagePieces = [];
     const colsToCut = 3;

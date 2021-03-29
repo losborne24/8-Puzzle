@@ -1,9 +1,9 @@
 <div class="container">
   <div
     class="grid"
+    *ngIf="gridImages.length === 9"
     [style.height]="gridSize + 'px'"
     [style.width]="gridSize + 'px'"
-    *ngIf="gridImages.length === 9"
   >
     <div class="item" *ngFor="let image of gridImages; let i = index">
       <img

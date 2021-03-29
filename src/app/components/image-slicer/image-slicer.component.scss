@@ -29,8 +29,8 @@
 }
 .grid-container {
   overflow: hidden;
-  width: 200px;
-  height: 200px;
+  width: 12.5vw;
+  height: 12.5vw;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   touch-action: none;

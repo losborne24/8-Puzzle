@@ -70,6 +70,7 @@ export class DraggableGridItemDirective {
       event.target.innerWidth < event.target.innerHeight
         ? event.target.innerWidth
         : event.target.innerHeight;
+
     this.renderer.setStyle(
       this.element.nativeElement,
       'transform',
@@ -164,9 +165,9 @@ export class DraggableGridItemDirective {
           var target = event.target;
           var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
           var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-          if (Math.abs(x) * 3 > size || Math.abs(y) * 3 > size) {
-            hasEmptyCellChanged.emit(true);
-          }
+          // if (Math.abs(x) * 6 > size || Math.abs(y) * 6 > size) {
+          hasEmptyCellChanged.emit(true);
+          // }
 
           target.style.webkitTransform = target.style.transform =
             'translate(' + 0 + 'px, ' + 0 + 'px)';

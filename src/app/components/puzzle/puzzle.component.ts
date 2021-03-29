@@ -47,6 +47,7 @@ export class PuzzleComponent implements OnInit {
       window.innerWidth < event.target.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
+    console.log(this.gridSize);
   }
   hasEmptyCellChanged(hasChanged, position) {
     if (hasChanged) {

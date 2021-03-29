@@ -93,7 +93,7 @@ export class DraggableDirective implements OnInit {
                 outer: 'parent',
               }), // minimum size
               interact.modifiers.restrictSize({
-                min: { width: 9, height: 9 },
+                min: { width: 25, height: 25 },
               }),
             ],
           }),
