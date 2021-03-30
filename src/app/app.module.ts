@@ -18,6 +18,8 @@ import { MatCardModule } from '@angular/material/card';
 import { DraggableDirective } from './directives/draggable.directive';
 import { PuzzleComponent } from './components/puzzle/puzzle.component';
 import { DraggableGridItemDirective } from './directives/draggable-grid-item.directive';
+import { DragAndDropDemoImagesDirective } from './directives/drag-and-drop-demo-images.directive';
+import { DropZoneDirective } from './directives/drop-zone.directive';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { DraggableGridItemDirective } from './directives/draggable-grid-item.dir
     DraggableDirective,
     PuzzleComponent,
     DraggableGridItemDirective,
+    DragAndDropDemoImagesDirective,
+    DropZoneDirective,
   ],
   imports: [
     BrowserModule,

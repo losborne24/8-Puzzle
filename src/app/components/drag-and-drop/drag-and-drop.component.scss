@@ -1,3 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > * {
+    margin: 1rem;
+  }
+}
 .dnd-container {
   display: flex;
   flex-direction: column;
@@ -39,6 +48,18 @@ p {
   margin: 0.5rem 0;
   text-align: center;
   color: #efefef;
+}
+
+.demo-img {
+  border: 0.25rem solid #efefef;
+  border-radius: 50%;
+  height: 10vw;
+  width: 10vw;
+  overflow: hidden;
+  touch-action: none;
+  padding: 0;
+  margin: 0;
+  object-fit: cover;
 }
 @keyframes rubberBand {
   from {

@@ -1,37 +1,43 @@
-<div
-  appDragAndDrop
-  class="dnd-container"
-  (fileHover)="onFileHover($event)"
-  (fileDropped)="onFileDropped($event)"
-  [ngClass]="fileHover && 'dnd-file-hover'"
->
-  <div class="icon-upload-container">
-    <mat-icon
-      class="icon-upload"
-      [inline]="true"
-      [ngClass]="{
-        'icon-file-hover': fileHover,
-        'icon-file-dropped': fileDropped
-      }"
-      >add_photo_alternate</mat-icon
-    >
-  </div>
-  <p>Drag & Drop your image here</p>
-  <p>or</p>
-  <button
-    class="btn-browse"
-    mat-raised-button
-    color="primary"
-    (click)="inputImageUpload.click()"
+<div class="container">
+  <div
+    appDragAndDrop
+    appDropZone
+    class="dnd-container"
+    (fileHover)="onFileHover($event)"
+    (fileDropped)="onFileDropped($event)"
+    [ngClass]="fileHover && 'dnd-file-hover'"
   >
-    Browse for an image
-  </button>
-  <!-- Hidden input for file upload-->
-  <input
-    (change)="onFileSelected($event)"
-    type="file"
-    #inputImageUpload
-    hidden
-    accept="image/*"
-  />
+    <div class="icon-upload-container">
+      <mat-icon
+        class="icon-upload"
+        [inline]="true"
+        [ngClass]="{
+          'icon-file-hover': fileHover,
+          'icon-file-dropped': fileDropped
+        }"
+        >add_photo_alternate</mat-icon
+      >
+    </div>
+    <p>Drag & Drop your image here</p>
+    <p>or</p>
+    <button
+      class="btn-browse"
+      mat-raised-button
+      color="primary"
+      (click)="inputImageUpload.click()"
+    >
+      Browse for an image
+    </button>
+    <!-- Hidden input for file upload-->
+    <input
+      (change)="onFileSelected($event)"
+      type="file"
+      #inputImageUpload
+      hidden
+      accept="image/*"
+    />
+  </div>
+  <div class="img-container">
+    <img class="demo-img" [src]="img1" appDragAndDropDemoImages />
+  </div>
 </div>

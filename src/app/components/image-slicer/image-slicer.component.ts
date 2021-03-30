@@ -89,7 +89,7 @@ export class ImageSlicerComponent implements OnInit {
     };
   }
   convertToString() {
-    this.image.src = this.imgData.toString();
+    this.image.src = 'assets/images/beach-dog.jpg'; //= this.imgData.toString();
   }
 
   drawImageProp() {
