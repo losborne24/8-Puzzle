@@ -24,7 +24,6 @@ export class AStarSolverService {
 
   solvePuzzle(initState, emptyPos) {
     this.expCount = 0;
-
     this.openNodes = [];
     this.closedNodes = [];
     this.id = 0;
@@ -38,8 +37,12 @@ export class AStarSolverService {
       g: 0,
     });
     const h = this.getManhattanDistance(initialState);
-    this.openNodes[0].f = h;
-    this.getChildren(this.openNodes[0]);
+    if (h === 0) {
+      this.finalPath = [initialState];
+    } else {
+      this.openNodes[0].f = h;
+      this.getChildren(this.openNodes[0]);
+    }
     return this.finalPath;
   }
 
@@ -87,9 +90,8 @@ export class AStarSolverService {
       }
     });
     this.expCount += 1;
-    if (this.expCount > 4000) {
+    if (this.expCount > 3000) {
       this.finalPath = 'failed';
-      // emit failed of solve
     } else {
       return this.getChildren(minNode);
     }
@@ -112,6 +114,7 @@ export class AStarSolverService {
     let prevNode = this.closedNodes.find(
       (node) => node.id === goalNode.prevNode
     );
+    this.finalPath.unshift(prevNode.state);
     while (prevNode.prevNode) {
       prevNode = this.closedNodes.find((node) => node.id === prevNode.prevNode);
       this.finalPath.unshift(prevNode.state);

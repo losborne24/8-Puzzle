@@ -115,5 +115,14 @@ export class PuzzleComponent implements OnInit {
       this.emptyPos
     );
     console.log(result);
+    if (result !== 'failed') {
+      for (let i = 0; i < result.length; i++) {
+        setTimeout(() => {
+          let nextEmptyCell = result[i].indexOf(null);
+          this.hasEmptyCellChanged(true, nextEmptyCell);
+          console.log(result[i].indexOf(null));
+        }, i * 500);
+      }
+    }
   }
 }
