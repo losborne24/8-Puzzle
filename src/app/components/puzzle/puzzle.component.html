@@ -16,14 +16,21 @@
       >
         <img class="item-img" [src]="image" />
         <h1 *ngIf="this.isShowNumbers" class="txt-correct-pos">
-          {{ gridData[i] < removedPos ? gridData[i] + 1 : gridData[i] }}
+          <!--  {{ gridData[i] < removedPos ? gridData[i] + 1 : gridData[i] }}-->
+          {{ gridData[i] < removedPos ? gridData[i] : gridData[i] }}
         </h1>
       </div>
     </div>
   </div>
   <div class="btn-container">
+    <button mat-raised-button color="primary" (click)="shuffleItems()">
+      Shuffle
+    </button>
     <button mat-raised-button color="primary" (click)="onToggleNumbers()">
       Toggle Numbers
+    </button>
+    <button mat-raised-button color="primary" (click)="onAutoSolve()">
+      Solve
     </button>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { AStarSolverService } from 'src/app/services/a-star-solver.service';
 
 @Component({
   selector: 'app-puzzle',
@@ -11,28 +12,20 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 export class PuzzleComponent implements OnInit {
   @Input() images;
   gridData: Array<number>;
-  gridImages = [];
+  gridImages; // = [];
   gridSize = 0;
   emptyPos;
   removedPos;
   removedPosOptions = [0, 2, 6, 8];
   isShowNumbers = false;
-  constructor() {}
+  constructor(private aStarSolverService: AStarSolverService) {}
 
   ngOnInit(): void {
     this.gridSize =
       window.innerWidth < window.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
-
     this.shuffleItems();
-    for (let i = 0; i < 9; i++) {
-      if (i === this.removedPos) {
-        this.gridImages.push(null);
-      } else {
-        this.gridImages.push(this.images[this.gridData[i]]);
-      }
-    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -43,11 +36,14 @@ export class PuzzleComponent implements OnInit {
         : window.innerHeight / 2;
   }
   shuffleItems() {
+    this.gridImages = [];
+
     this.removedPos = this.removedPosOptions[Math.floor(Math.random() * 4)]; // 0, 2, 6, 8
-    this.emptyPos = this.removedPos;
+    this.emptyPos = Math.floor(Math.random() * 9);
+
     this.gridData = [];
     for (let i = 0; i < 9; i++) {
-      if (i !== this.emptyPos) {
+      if (i !== this.removedPos) {
         this.gridData.push(i);
       }
     }
@@ -64,9 +60,15 @@ export class PuzzleComponent implements OnInit {
       }
       if (inversions % 2 === 0) {
         isSolvable = true;
-        this.gridData.splice(this.emptyPos, 0, this.emptyPos);
-
+        this.gridData.splice(this.emptyPos, 0, this.removedPos);
         break;
+      }
+    }
+    for (let i = 0; i < 9; i++) {
+      if (i === this.emptyPos) {
+        this.gridImages.push(null);
+      } else {
+        this.gridImages.push(this.images[this.gridData[i]]);
       }
     }
   }
@@ -106,5 +108,12 @@ export class PuzzleComponent implements OnInit {
   }
   onToggleNumbers() {
     this.isShowNumbers = !this.isShowNumbers;
+  }
+  onAutoSolve() {
+    const result = this.aStarSolverService.solvePuzzle(
+      this.gridData,
+      this.emptyPos
+    );
+    console.log(result);
   }
 }

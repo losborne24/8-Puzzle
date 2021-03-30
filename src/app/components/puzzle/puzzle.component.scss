@@ -38,3 +38,9 @@
   margin: 0;
   color: #efefef;
 }
+.btn-container {
+  display: flex;
+  & > * {
+    margin: 1rem;
+  }
+}

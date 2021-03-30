@@ -20,6 +20,5 @@ export class MainComponent implements OnInit {
   onImageCrop(images) {
     this.screenDisplayed = 'PUZZLE';
     this.images = images;
-    console.log(images);
   }
 }
