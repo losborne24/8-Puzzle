@@ -33,9 +33,9 @@ export class DraggableDirective implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     let size =
-      event.target.innerWidth < event.target.innerHeight
-        ? event.target.innerWidth
-        : event.target.innerHeight;
+      window.innerWidth < window.innerHeight
+        ? window.innerWidth
+        : window.innerHeight;
 
     this.renderer.setStyle(
       this.element.nativeElement,
@@ -57,6 +57,7 @@ export class DraggableDirective implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onResize(null);
     interact(this.element.nativeElement)
       .resizable({
         // resize from all edges and corners
@@ -93,7 +94,7 @@ export class DraggableDirective implements OnInit {
                 outer: 'parent',
               }), // minimum size
               interact.modifiers.restrictSize({
-                min: { width: 25, height: 25 },
+                min: { width: 68, height: 68 },
               }),
             ],
           }),

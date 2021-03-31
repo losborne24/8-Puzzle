@@ -1,4 +1,10 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { AStarSolverService } from 'src/app/services/a-star-solver.service';
 
 @Component({
@@ -18,22 +24,27 @@ export class PuzzleComponent implements OnInit {
   removedPos;
   removedPosOptions = [0, 2, 6, 8];
   isShowNumbers = false;
-  constructor(private aStarSolverService: AStarSolverService) {}
-
+  constructor(
+    private aStarSolverService: AStarSolverService,
+    private changeDetector: ChangeDetectorRef
+  ) {}
   ngOnInit(): void {
+    this.shuffleItems();
     this.gridSize =
       window.innerWidth < window.innerHeight
         ? window.innerWidth / 2
         : window.innerHeight / 2;
-    this.shuffleItems();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.gridSize =
-      window.innerWidth < event.target.innerHeight
-        ? window.innerWidth / 2
-        : window.innerHeight / 2;
+    setTimeout(() => {
+      this.gridSize =
+        window.innerWidth < event.target.innerHeight
+          ? window.innerWidth / 2
+          : window.innerHeight / 2;
+    }, 0);
+    console.log(window.innerWidth);
   }
   shuffleItems() {
     this.gridImages = [];

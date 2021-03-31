@@ -1,12 +1,9 @@
 <div class="container">
-  <div
-    class="grid"
-    *ngIf="gridImages.length === 9"
-    [style.height]="gridSize + 'px'"
-    [style.width]="gridSize + 'px'"
-  >
+  <div class="grid" *ngIf="gridImages.length === 9">
     <div class="item" *ngFor="let image of gridImages; let i = index">
       <div
+        [style.height]="gridSize / 3 + 'px'"
+        [style.width]="gridSize / 3 + 'px'"
         *ngIf="image"
         class="img-container"
         appDraggableGridItem
@@ -17,7 +14,6 @@
         <img class="item-img" [src]="image" />
         <h1 *ngIf="this.isShowNumbers" class="txt-correct-pos">
           {{ gridData[i] < removedPos ? gridData[i] + 1 : gridData[i] }}
-          <!--{{ gridData[i] < removedPos ? gridData[i] : gridData[i] }}-->
         </h1>
       </div>
     </div>

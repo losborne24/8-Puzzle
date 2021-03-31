@@ -78,18 +78,29 @@ export class ImageSlicerComponent implements OnInit {
       this.drawImageProp();
     }
   }
-  onImageLoaded(file) {
-    this.filename = file.name;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async (_) => {
-      this.imgData = reader.result;
-      await this.convertToString();
+  async onImageLoaded(file) {
+    if (typeof file === 'string') {
+      // demo images
+      await this.convertToString(file);
       this.drawImageProp();
-    };
+    } else {
+      // uploaded images
+      //   this.filename = file.name;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async (_) => {
+        this.imgData = reader.result;
+        await this.convertToString(file);
+        this.drawImageProp();
+      };
+    }
   }
-  convertToString() {
-    this.image.src = 'assets/images/beach-dog.jpg'; //= this.imgData.toString();
+  convertToString(file) {
+    if (typeof file === 'string') {
+      this.image.src = `assets/images/${file}`;
+    } else {
+      this.image.src = this.imgData.toString();
+    }
   }
 
   drawImageProp() {

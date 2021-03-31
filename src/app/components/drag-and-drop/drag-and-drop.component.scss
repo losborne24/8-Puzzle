@@ -49,7 +49,12 @@ p {
   text-align: center;
   color: #efefef;
 }
-
+.spacing-container {
+  height: 2rem;
+}
+.img-container {
+  display: flex;
+}
 .demo-img {
   border: 0.25rem solid #efefef;
   border-radius: 50%;
@@ -60,6 +65,14 @@ p {
   padding: 0;
   margin: 0;
   object-fit: cover;
+  transition: border-radius 0.5s;
+  &:hover {
+    border-radius: 5%;
+  }
+  user-select: none;
+}
+.demo-img:nth-child(odd) {
+  margin-top: 5vw;
 }
 @keyframes rubberBand {
   from {

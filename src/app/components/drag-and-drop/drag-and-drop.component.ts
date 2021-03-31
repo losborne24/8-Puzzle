@@ -7,7 +7,16 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class DragAndDropComponent implements OnInit {
   @Output() imageFile = new EventEmitter<any>();
-  img1 = 'assets/images/beach-dog.jpg';
+  demoImages = [
+    'assets/images/barcelona.jpg',
+    'assets/images/beach-dog.jpg',
+    'assets/images/bled.jpg',
+    'assets/images/cat.jpg',
+    'assets/images/edinburgh.png',
+    'assets/images/peaks.png',
+    'assets/images/rock-stack.jpg',
+    'assets/images/seville.jpg',
+  ];
   fileHover = false;
   fileDropped = false;
 
@@ -31,7 +40,6 @@ export class DragAndDropComponent implements OnInit {
     }
   }
   onFileUpload(file) {
-    console.log(file);
     this.imageFile.emit(file);
   }
 }

@@ -77,7 +77,6 @@ export class DraggableGridItemDirective {
   }
 
   ngOnInit(): void {}
-  ngAfterContentChecked() {}
 
   updateElementDraggable() {
     if (interact.isSet(this.element.nativeElement)) {

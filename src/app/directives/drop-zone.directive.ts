@@ -21,7 +21,9 @@ export class DropZoneDirective {
         this.fileHover.emit(false);
       })
       .on('drop', (event) => {
-        this.fileDropped.emit(event.relatedTarget.src);
+        const path = event.relatedTarget.src;
+        const n = path.lastIndexOf('/');
+        this.fileDropped.emit(path.substring(n + 1));
       });
   }
 }
