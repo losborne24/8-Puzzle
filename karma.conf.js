@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/image-slicer'),
+      dir: require('path').join(__dirname, './coverage/8-puzzle'),
       subdir: '.',
       reporters: [
         { type: 'html' },
