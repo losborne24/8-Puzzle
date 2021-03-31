@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="grid" *ngIf="gridImages.length === 9">
+  <div class="grid" *ngIf="!isComplete && gridImages.length === 9">
     <div class="item" *ngFor="let image of gridImages; let i = index">
       <div
         [style.height]="gridSize / 3 + 'px'"
@@ -18,14 +18,53 @@
       </div>
     </div>
   </div>
+  <div *ngIf="isComplete">
+    <img
+      class="original-img"
+      [src]="originalImage"
+      [style.height]="gridSize + 'px'"
+      [style.width]="gridSize + 'px'"
+    />
+  </div>
   <div class="btn-container">
-    <button mat-raised-button color="primary" (click)="shuffleItems()">
-      Shuffle
+    <button *ngIf="!isComplete" mat-raised-button (click)="onUploadNew()">
+      Upload New
     </button>
-    <button mat-raised-button color="primary" (click)="onToggleNumbers()">
+    <button
+      *ngIf="isComplete"
+      mat-raised-button
+      color="accent"
+      (click)="onUploadNew()"
+    >
+      Upload New
+    </button>
+    <button
+      *ngIf="!isComplete"
+      mat-raised-button
+      color="accent"
+      (click)="onToggleNumbers()"
+    >
       Toggle Numbers
     </button>
-    <button mat-raised-button color="primary" (click)="onAutoSolve()">
+    <button
+      *ngIf="!isComplete"
+      mat-raised-button
+      color="accent"
+      (click)="shuffleItems()"
+      [disabled]="disableButtons"
+    >
+      Shuffle
+    </button>
+    <button *ngIf="isComplete" mat-raised-button (click)="shuffleItems()">
+      Reshuffle
+    </button>
+    <button
+      *ngIf="!isComplete"
+      mat-raised-button
+      color="accent"
+      (click)="onAutoSolve()"
+      [disabled]="disableButtons"
+    >
       Solve
     </button>
   </div>

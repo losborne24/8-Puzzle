@@ -26,6 +26,7 @@ export class ImageSlicerComponent implements OnInit {
   @ViewChild('grid', { static: false }) grid: ElementRef;
 
   @Output() images = new EventEmitter<any>();
+  @Output() uploadNew = new EventEmitter<any>();
 
   windowWidth = 0;
   windowHeight = 0;
@@ -43,7 +44,7 @@ export class ImageSlicerComponent implements OnInit {
   canvasHeight = 0;
   maxCanvasHeight = 0;
   maxCanvasWidth = 0;
-
+  imagePieces = [];
   // imgData: contents of image uploaded
   imgData: string | ArrayBuffer;
 
@@ -141,7 +142,6 @@ export class ImageSlicerComponent implements OnInit {
     const gridTranslationX = matrix.m41 > 0 ? matrix.m41 : 0;
     const gridTranslationY = matrix.m42 > 0 ? matrix.m42 : 0;
 
-    var imagePieces = [];
     const colsToCut = 3;
     const rowsToCut = 3;
     const pieceWidth = pieceSize;
@@ -149,7 +149,24 @@ export class ImageSlicerComponent implements OnInit {
     const image = new Image();
 
     image.src = this.ctx.canvas.toDataURL();
+
     setTimeout(() => {
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      canvas.width = pieceWidth * 3;
+      canvas.height = pieceHeight * 3;
+      context.drawImage(
+        image,
+        gridTranslationX,
+        gridTranslationY,
+        pieceWidth * 3,
+        pieceHeight * 3,
+        0,
+        0,
+        pieceWidth * 3,
+        pieceHeight * 3
+      );
+      this.imagePieces.push(canvas.toDataURL());
       for (var y = 0; y < rowsToCut; y++) {
         for (var x = 0; x < colsToCut; x++) {
           var canvas = document.createElement('canvas');
@@ -167,10 +184,13 @@ export class ImageSlicerComponent implements OnInit {
             pieceWidth,
             pieceHeight
           );
-          imagePieces.push(canvas.toDataURL());
+          this.imagePieces.push(canvas.toDataURL());
         }
       }
-      this.images.emit(imagePieces);
+      this.images.emit(this.imagePieces);
     }, 0);
+  }
+  onUploadNew() {
+    this.uploadNew.emit(true);
   }
 }

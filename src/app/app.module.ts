@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { DraggableDirective } from './directives/draggable.directive';
 import { PuzzleComponent } from './components/puzzle/puzzle.component';
 import { DraggableGridItemDirective } from './directives/draggable-grid-item.directive';
@@ -43,6 +45,7 @@ import { DropZoneDirective } from './directives/drop-zone.directive';
     MatButtonModule,
     MatSliderModule,
     MatCardModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

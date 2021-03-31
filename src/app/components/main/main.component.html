@@ -6,10 +6,13 @@
   <app-image-slicer
     *ngIf="screenDisplayed === 'CROP'"
     [imageFile]="imageFile"
+    (uploadNew)="onUploadNew($event)"
     (images)="onImageCrop($event)"
   ></app-image-slicer>
   <app-puzzle
     *ngIf="screenDisplayed === 'PUZZLE'"
     [images]="images"
+    (uploadNew)="onUploadNew($event)"
+    [originalImage]="originalImage"
   ></app-puzzle>
 </div>

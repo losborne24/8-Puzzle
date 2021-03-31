@@ -41,6 +41,10 @@
 .btn-container {
   display: flex;
   & > * {
-    margin: 1rem;
+    margin: 0.5rem;
   }
+}
+.original-img {
+  border: #dcdcdc 0.3rem solid;
+  border-radius: 0.5rem;
 }

@@ -36,6 +36,12 @@
   touch-action: none;
   box-sizing: border-box;
 }
+.btn-container {
+  display: flex;
+  & > * {
+    margin: 0.5rem;
+  }
+}
 @media screen and (min-width: 600px) {
   .grid-container {
     border-radius: 0.5rem;

@@ -1,10 +1,12 @@
 import {
-  ChangeDetectorRef,
   Component,
+  EventEmitter,
   HostListener,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AStarSolverService } from 'src/app/services/a-star-solver.service';
 
 @Component({
@@ -16,7 +18,10 @@ import { AStarSolverService } from 'src/app/services/a-star-solver.service';
   },
 })
 export class PuzzleComponent implements OnInit {
+  disableButtons = false;
+  @Input() originalImage;
   @Input() images;
+  @Output() uploadNew = new EventEmitter<any>();
   gridData: Array<number>;
   gridImages; // = [];
   gridSize = 0;
@@ -24,9 +29,10 @@ export class PuzzleComponent implements OnInit {
   removedPos;
   removedPosOptions = [0, 2, 6, 8];
   isShowNumbers = false;
+  isComplete = false;
   constructor(
     private aStarSolverService: AStarSolverService,
-    private changeDetector: ChangeDetectorRef
+    private _snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     this.shuffleItems();
@@ -44,9 +50,9 @@ export class PuzzleComponent implements OnInit {
           ? window.innerWidth / 2
           : window.innerHeight / 2;
     }, 0);
-    console.log(window.innerWidth);
   }
   shuffleItems() {
+    this.isComplete = false;
     this.gridImages = [];
 
     this.removedPos = this.removedPosOptions[Math.floor(Math.random() * 4)]; // 0, 2, 6, 8
@@ -71,7 +77,7 @@ export class PuzzleComponent implements OnInit {
       }
       if (inversions % 2 === 0) {
         isSolvable = true;
-        this.gridData.splice(this.emptyPos, 0, this.removedPos);
+        this.gridData.splice(this.emptyPos, 0, null);
         break;
       }
     }
@@ -94,46 +100,60 @@ export class PuzzleComponent implements OnInit {
   hasEmptyCellChanged(hasChanged, position) {
     if (hasChanged) {
       // update grid data
-      const temp = this.gridData[this.emptyPos];
       this.gridData[this.emptyPos] = this.gridData[position];
-      this.gridData[position] = temp;
+      this.gridData[position] = null;
       // update grid images
       this.gridImages[this.emptyPos] = this.images[
         this.gridData[this.emptyPos]
       ];
       this.gridImages[position] = null;
       this.emptyPos = position;
-      const isComplete = this.isPuzzleComplete();
-      console.log(isComplete);
+
+      this.isPuzzleComplete();
     }
   }
   isPuzzleComplete() {
     let complete = true;
     for (let i = 0; i < 9; i++) {
-      if (i !== this.gridData[i]) {
-        complete = false;
-        return complete;
+      if (this.gridData[i] !== null) {
+        if (i !== this.gridData[i]) {
+          complete = false;
+          break;
+        }
       }
     }
-    return complete;
+    if (complete) {
+      setTimeout(() => {
+        this.isComplete = true;
+      }, 1000);
+    }
   }
+
   onToggleNumbers() {
     this.isShowNumbers = !this.isShowNumbers;
   }
   onAutoSolve() {
-    const result = this.aStarSolverService.solvePuzzle(
-      this.gridData,
-      this.emptyPos
-    );
-    console.log(result);
+    this.disableButtons = true;
+    const result = this.aStarSolverService.solvePuzzle(this.gridData);
     if (result !== 'failed') {
       for (let i = 0; i < result.length; i++) {
         setTimeout(() => {
           let nextEmptyCell = result[i].indexOf(null);
           this.hasEmptyCellChanged(true, nextEmptyCell);
-          console.log(result[i].indexOf(null));
         }, i * 250);
       }
+    } else {
+      this._snackBar.open(
+        'Sorry! Our search algoritm was unable to solve this puzzle. Move a few tiles around and try again.',
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+      this.disableButtons = false;
     }
+  }
+  onUploadNew() {
+    this.uploadNew.emit(true);
   }
 }

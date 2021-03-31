@@ -22,13 +22,12 @@ export class AStarSolverService {
   ];
   constructor() {}
 
-  solvePuzzle(initState, emptyPos) {
+  solvePuzzle(initState) {
     this.expCount = 0;
     this.openNodes = [];
     this.closedNodes = [];
     this.id = 0;
     let initialState = initState;
-    initialState[emptyPos] = null;
     this.openNodes.push({
       id: this.id,
       prevNode: null,

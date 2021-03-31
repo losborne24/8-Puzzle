@@ -9,6 +9,7 @@ export class MainComponent implements OnInit {
   screenDisplayed = 'UPLOAD';
   imageFile;
   images;
+  originalImage;
   constructor() {}
 
   ngOnInit(): void {}
@@ -19,6 +20,12 @@ export class MainComponent implements OnInit {
   }
   onImageCrop(images) {
     this.screenDisplayed = 'PUZZLE';
-    this.images = images;
+    this.originalImage = images[0];
+    this.images = images.slice(1);
+  }
+  onUploadNew(event) {
+    if (event) {
+      this.screenDisplayed = 'UPLOAD';
+    }
   }
 }
