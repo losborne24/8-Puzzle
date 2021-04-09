@@ -39,8 +39,6 @@ export class DragAndDropDemoImagesDirective {
     interact(this.element.nativeElement).draggable({
       listeners: {
         move(event) {
-          console.log('here');
-
           var target = event.target;
           // keep the dragged position in the data-x/data-y attributes
           var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
@@ -55,7 +53,7 @@ export class DragAndDropDemoImagesDirective {
         },
       },
       modifiers: [this.restrictionBox],
-      //  inertia: true,
+      inertia: true,
     });
   }
 }

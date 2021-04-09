@@ -40,11 +40,12 @@
   </div>
   <div class="spacing-container"></div>
   <div class="img-container">
-    <img
+    <div
       *ngFor="let img of demoImages"
-      class="demo-img"
-      [src]="img"
       appDragAndDropDemoImages
-    />
+      class="img-item"
+    >
+      <img class="demo-img" [src]="img" />
+    </div>
   </div>
 </div>

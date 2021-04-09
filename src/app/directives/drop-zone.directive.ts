@@ -11,7 +11,7 @@ export class DropZoneDirective {
   ngOnInit(): void {
     interact(this.element.nativeElement)
       .dropzone({
-        accept: '.demo-img',
+        accept: '.img-item',
         overlap: 0.75,
       })
       .on('dragenter', (event) => {
@@ -21,7 +21,7 @@ export class DropZoneDirective {
         this.fileHover.emit(false);
       })
       .on('drop', (event) => {
-        const path = event.relatedTarget.src;
+        const path = event.relatedTarget.firstChild.src;
         const n = path.lastIndexOf('/');
         this.fileDropped.emit(path.substring(n + 1));
       });
