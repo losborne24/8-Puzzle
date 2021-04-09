@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ImageSlicerComponent } from './components/image-slicer/image-slicer.component';
-import { TestComponent } from './components/test/test.component';
 import { DragAndDropComponent } from './components/drag-and-drop/drag-and-drop.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { MainComponent } from './components/main/main.component';
@@ -27,7 +26,6 @@ import { DropZoneDirective } from './directives/drop-zone.directive';
   declarations: [
     AppComponent,
     ImageSlicerComponent,
-    TestComponent,
     DragAndDropDirective,
     DragAndDropComponent,
     MainComponent,

@@ -18,7 +18,7 @@ import { AStarSolverService } from 'src/app/services/a-star-solver.service';
   },
 })
 export class PuzzleComponent implements OnInit {
-  disableButtons = false;
+  disableButtons: boolean = false;
   @Input() originalImage;
   @Input() images;
   @Output() uploadNew = new EventEmitter<any>();
@@ -52,6 +52,7 @@ export class PuzzleComponent implements OnInit {
     }, 0);
   }
   shuffleItems() {
+    this.disableButtons = false;
     this.isComplete = false;
     this.gridImages = [];
 
