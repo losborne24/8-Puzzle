@@ -23,7 +23,7 @@ export class PuzzleComponent implements OnInit {
   @Input() images;
   @Output() uploadNew = new EventEmitter<any>();
   gridData: Array<number>;
-  gridImages; // = [];
+  gridImages;
   gridSize = 0;
   emptyPos;
   removedPos;
