@@ -55,15 +55,13 @@ p {
 .img-container {
   display: flex;
 }
-.img-item {
-  touch-action: none;
-}
 .demo-img {
   border: 0.25rem solid #efefef;
   border-radius: 50%;
   height: 10vw;
   width: 10vw;
   overflow: hidden;
+  touch-action: none;
   padding: 0;
   margin: 0;
   object-fit: cover;
@@ -73,7 +71,7 @@ p {
   }
   user-select: none;
 }
-.img-item:nth-child(odd) {
+.demo-img:nth-child(odd) {
   margin-top: 5vw;
 }
 @keyframes rubberBand {
