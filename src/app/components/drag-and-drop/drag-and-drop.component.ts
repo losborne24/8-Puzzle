@@ -42,4 +42,7 @@ export class DragAndDropComponent implements OnInit {
   onFileUpload(file) {
     this.imageFile.emit(file);
   }
+  onImageLoad($event) {
+    $event.target.hidden = false;
+  }
 }

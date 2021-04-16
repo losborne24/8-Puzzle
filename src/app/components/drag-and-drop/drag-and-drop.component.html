@@ -45,6 +45,8 @@
       class="demo-img"
       [src]="img"
       appDragAndDropDemoImages
+      hidden
+      (load)="onImageLoad($event)"
     />
   </div>
 </div>
