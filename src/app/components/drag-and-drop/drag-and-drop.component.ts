@@ -9,9 +9,7 @@ export class DragAndDropComponent implements OnInit {
   @Output() imageFile = new EventEmitter<any>();
   demoImages = [
     'assets/images/barcelona.jpg',
-    'assets/images/beach-dog.jpg',
     'assets/images/bled.jpg',
-    'assets/images/cat.jpg',
     'assets/images/edinburgh.png',
     'assets/images/peaks.png',
     'assets/images/rock-stack.jpg',
@@ -22,7 +20,9 @@ export class DragAndDropComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // wait for images to load
+  }
 
   onFileHover(isFileHover) {
     this.fileHover = isFileHover;

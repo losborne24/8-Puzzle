@@ -11,7 +11,7 @@ export class DropZoneDirective {
   ngOnInit(): void {
     interact(this.element.nativeElement)
       .dropzone({
-        accept: '.item-img',
+        accept: '.demo-img',
         overlap: 0.75,
       })
       .on('dragenter', (event) => {
